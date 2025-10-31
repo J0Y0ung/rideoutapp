@@ -6,59 +6,85 @@
 <title>R!DE OUT • 홈</title>
 <link rel="stylesheet" href="ui.css">
 </head>
+
 <body>
 <div class="app">
- <header>
-  <div class="logo">
-    <img src="images/logo.png" alt="logo" class="logo-img">
-    <span>R!DE OUT</span>
-  </div>
 
-  <div id="userInfo" class="user-info" style="display:none;">
-    <img id="userImg" src=""><span id="userName"></span>
-  </div>
-  <div id="logoutPopup" class="logout-popup">
-    <button id="logoutBtn">🚪 로그아웃</button>
-  </div>
-</header>
+  <!-- ===== 상단 헤더 ===== -->
+  <header>
+    <!-- 🔹 왼쪽: 로고 + 이름 -->
+    <div class="logo">
+      <img src="images/logo.png" alt="logo" class="logo-img">
+      <span>R!DE OUT</span>
+    </div>
 
+    <!-- 🔹 오른쪽: 프로필 -->
+    <div id="userInfo" class="user-info">
+      <img id="userImg" src="images/defaultProfile.png" alt="profile">
+      <span id="userName">USER</span>
+    </div>
+
+    <!-- 🔹 프로필 클릭 시 드롭다운 메뉴 -->
+    <div id="userMenu" class="user-menu">
+      <button id="profileBtn">👤 프로필</button>
+      <button id="settingsBtn">⚙️ 설정</button>
+      <button id="logoutBtn">🚪 로그아웃</button>
+    </div>
+  </header>
+
+  <!-- ===== 메인 콘텐츠 ===== -->
   <main id="content">
     <section class="app-icon-grid">
-
-      <div class="app-icon" onclick="openPage('beat.html')">
-        <div class="app-icon-box"><i>🎧</i></div>
-        <span>비트 추천</span>
-      </div>
-
-      <div class="app-icon" onclick="openPage('rhyme.html')">
-        <div class="app-icon-box"><i>✍️</i></div>
-        <span>라임 추천</span>
-      </div>
-
-      <div class="app-icon" onclick="openPage('alarm.html')">
-        <div class="app-icon-box"><i>⏰</i></div>
-        <span>비트 알람</span>
-      </div>
-
-      <div class="app-icon" onclick="openPage('health.html')">
-        <div class="app-icon-box"><i>💪</i></div>
-        <span>건강 관리</span>
-      </div>
-
-      <div class="app-icon" onclick="openPage('ai.html')">
-        <div class="app-icon-box"><i>🤖</i></div>
-        <span>성장하는 AI</span>
-      </div>
-
+      <div class="app-icon" onclick="openPage('beat.html')"><i>🎧</i><span>비트 추천</span></div>
+      <div class="app-icon" onclick="openPage('rhyme.html')"><i>✍️</i><span>라임 추천</span></div>
+      <div class="app-icon" onclick="openPage('alarm.html')"><i>⏰</i><span>비트 알람</span></div>
+      <div class="app-icon" onclick="openPage('health.html')"><i>💪</i><span>건강 관리</span></div>
+      <div class="app-icon" onclick="openPage('ai.html')"><i>🤖</i><span>성장하는 AI</span></div>
     </section>
   </main>
 
+  <!-- ===== 하단 탭바 ===== -->
   <footer>
     <div class="tab-btn" id="homeBtn" title="Home"></div>
   </footer>
 </div>
 
+<!-- ===== 자바스크립트 ===== -->
 <script src="ui.js"></script>
-<script>injectChrome('홈');</script>
+
+<script>
+// ✅ 페이지 이동 함수
+function openPage(page) {
+  window.location.href = page;
+}
+
+// ✅ 프로필 클릭 시 메뉴 열기/닫기
+document.getElementById("userInfo").addEventListener("click", () => {
+  const menu = document.getElementById("userMenu");
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+});
+
+// ✅ 외부 클릭 시 메뉴 닫기
+window.addEventListener("click", (e) => {
+  const menu = document.getElementById("userMenu");
+  const userInfo = document.getElementById("userInfo");
+  if (!menu.contains(e.target) && !userInfo.contains(e.target)) {
+    menu.style.display = "none";
+  }
+});
+
+// ✅ 메뉴 기능 연결
+document.getElementById("profileBtn").addEventListener("click", () => {
+  alert("프로필 화면으로 이동합니다.");
+});
+document.getElementById("settingsBtn").addEventListener("click", () => {
+  alert("설정 페이지로 이동합니다.");
+});
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.removeItem("rideout_user");
+  document.getElementById("userMenu").style.display = "none";
+  alert("로그아웃 되었습니다.");
+});
+</script>
 </body>
 </html>

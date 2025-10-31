@@ -53,6 +53,43 @@
    };
    document.getElementById('homeBtn').onclick=()=>location.href='home.html';
  }
+ // ✅ 프로필 클릭 → 메뉴 토글
+ document.getElementById("userInfo").addEventListener("click", () => {
+   const menu = document.getElementById("userMenu");
+   // show 클래스 토글 (애니메이션 효과용)
+   if (menu.classList.contains("show")) {
+     menu.classList.remove("show");
+     setTimeout(() => (menu.style.display = "none"), 200);
+   } else {
+     menu.style.display = "flex";
+     setTimeout(() => menu.classList.add("show"), 10);
+   }
+ });
+
+ // ✅ 메뉴 외부 클릭 시 닫기
+ window.addEventListener("click", (e) => {
+   const menu = document.getElementById("userMenu");
+   const userInfo = document.getElementById("userInfo");
+   if (!menu.contains(e.target) && !userInfo.contains(e.target)) {
+     menu.classList.remove("show");
+     setTimeout(() => (menu.style.display = "none"), 200);
+   }
+ });
+
+ // ✅ 개별 버튼 동작
+ document.getElementById("profileBtn").addEventListener("click", () => {
+   alert("프로필 화면으로 이동합니다.");
+ });
+ document.getElementById("settingsBtn").addEventListener("click", () => {
+   alert("설정 페이지로 이동합니다.");
+ });
+ document.getElementById("logoutBtn").addEventListener("click", () => {
+   localStorage.removeItem("rideout_user");
+   document.getElementById("userMenu").classList.remove("show");
+   setTimeout(() => (document.getElementById("userMenu").style.display = "none"), 200);
+   alert("로그아웃 되었습니다.");
+ });
+
  </script>
  *
  */
