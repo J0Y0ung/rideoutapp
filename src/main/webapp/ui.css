@@ -5,7 +5,11 @@
 }
 
 /* ===== 기본 설정 ===== */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 html, body {
   height: 100%;
   display: flex;
@@ -26,7 +30,7 @@ html, body {
   flex-direction: column;
   background: var(--bg);
   border: 12px solid #1a1a1a;
-  border-radius: 60px; /* ✅ 둥근 모서리 */
+  border-radius: 60px;
   overflow: hidden;
   box-shadow: 0 0 60px rgba(0, 0, 0, 0.9);
   position: relative;
@@ -48,6 +52,7 @@ header {
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(12px);
   position: relative;
+  border-bottom: 1px solid #222;
 }
 .logo {
   font-weight: 900;
@@ -55,6 +60,7 @@ header {
   display: flex;
   align-items: center;
   gap: 8px;
+  color: var(--fg);
 }
 
 /* ===== 사용자 정보 ===== */
@@ -70,13 +76,20 @@ header {
   border-radius: 15px;
   padding: 4px 8px;
   cursor: pointer;
+  transition: 0.25s;
+}
+.user-info:hover {
+  background: rgba(50, 50, 50, 0.8);
 }
 .user-info img {
   width: 28px;
   height: 28px;
   border-radius: 50%;
 }
-.user-info span { font-size: 0.85rem; color: #fff; }
+.user-info span {
+  font-size: 0.85rem;
+  color: #fff;
+}
 
 /* ===== 로그아웃 팝업 ===== */
 .logout-popup {
@@ -100,7 +113,9 @@ header {
   font-size: 0.85rem;
   padding: 6px 0;
 }
-.logout-popup button:hover { color: var(--accent); }
+.logout-popup button:hover {
+  color: var(--accent);
+}
 
 /* ===== 메인 컨텐츠 ===== */
 main#content {
@@ -110,8 +125,13 @@ main#content {
   padding: 20px;
   scroll-behavior: smooth;
 }
-main::-webkit-scrollbar { width: 5px; }
-main::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+main::-webkit-scrollbar {
+  width: 5px;
+}
+main::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 10px;
+}
 
 /* ===== 하단 탭바 ===== */
 footer {
@@ -130,37 +150,60 @@ footer {
   cursor: pointer;
   transition: 0.2s;
 }
-.tab-btn:hover { background: #666; }
+.tab-btn:hover {
+  background: #666;
+}
 
-/* ===== 홈 아이콘 왼쪽 위 정렬 ===== */
+/* ===== 홈 아이콘 그리드 ===== */
 .app-icon-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  gap: 25px;
   padding: 20px;
-  justify-items: start;
+  justify-items: center;
   align-content: start;
 }
+
+/* 아이콘 + 텍스트 구조 */
 .app-icon {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  background: #111;
-  border-radius: 20px;
-  padding: 16px;
   cursor: pointer;
-  transition: 0.25s;
-  width: 70px;
-  height: 70px;
   animation: fadeUp 0.5s ease;
 }
-.app-icon:hover { background: #222; transform: scale(1.05); }
-.app-icon i { font-size: 1.5rem; }
+
+/* ✅ 아이콘 전용 박스 */
+.app-icon-box {
+  background: #111;
+  width: 70px;
+  height: 70px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.25s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+.app-icon-box:hover {
+  background: #1c1c1c;
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+}
+
+/* 아이콘 이미지 */
+.app-icon i {
+  font-size: 1.7rem;
+  transition: 0.2s;
+}
+
+/* 텍스트 (박스 밖) */
 .app-icon span {
-  margin-top: 6px;
-  font-size: 0.75rem;
+  margin-top: 8px;
+  font-size: 0.8rem;
   color: #fff;
+  text-align: center;
+  font-weight: 500;
 }
 
 /* ===== 아이콘 등장 애니메이션 ===== */
