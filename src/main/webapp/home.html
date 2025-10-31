@@ -19,14 +19,14 @@
     </div>
 
     <!-- 🔹 오른쪽: 프로필 -->
-    <div id="userInfo" class="user-info">
+    <div id="userInfo" class="user-info" style="display:none;">
       <img id="userImg" src="images/defaultProfile.png" alt="profile">
       <span id="userName">USER</span>
     </div>
 
     <!-- 🔹 프로필 클릭 시 드롭다운 메뉴 -->
     <div id="userMenu" class="user-menu">
-      <button id="profileBtn">👤 프로필</button>
+      <button id="changeProfileBtn">🖼️ 프로필 변경</button>
       <button id="settingsBtn">⚙️ 설정</button>
       <button id="logoutBtn">🚪 로그아웃</button>
     </div>
@@ -49,41 +49,84 @@
   </footer>
 </div>
 
+<!-- ===== 숨겨진 파일 입력창 ===== -->
+<input type="file" id="profileInput" accept="image/*" style="display:none;">
+
 <!-- ===== 자바스크립트 ===== -->
 <script src="ui.js"></script>
 
 <script>
-// ✅ 페이지 이동 함수
+/* ✅ 페이지 이동 */
 function openPage(page) {
   window.location.href = page;
 }
 
-// ✅ 프로필 클릭 시 메뉴 열기/닫기
-document.getElementById("userInfo").addEventListener("click", () => {
-  const menu = document.getElementById("userMenu");
-  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-});
-
-// ✅ 외부 클릭 시 메뉴 닫기
-window.addEventListener("click", (e) => {
-  const menu = document.getElementById("userMenu");
+/* ✅ 로그인된 사용자 정보 불러오기 */
+window.onload = () => {
+  const user = JSON.parse(localStorage.getItem("rideout_user"));
   const userInfo = document.getElementById("userInfo");
-  if (!menu.contains(e.target) && !userInfo.contains(e.target)) {
-    menu.style.display = "none";
+  if (user) {
+    document.getElementById("userName").textContent = user.name || "USER";
+    document.getElementById("userImg").src = user.picture || "images/defaultProfile.png";
+    userInfo.style.display = "flex";
+  } else {
+    userInfo.style.display = "none";
+  }
+};
+
+/* ✅ 메뉴 애니메이션 */
+const menu = document.getElementById("userMenu");
+const userInfo = document.getElementById("userInfo");
+
+userInfo.addEventListener("click", () => {
+  if (menu.classList.contains("show")) {
+    menu.classList.remove("show");
+    setTimeout(() => (menu.style.display = "none"), 200);
+  } else {
+    menu.style.display = "flex";
+    setTimeout(() => menu.classList.add("show"), 10);
   }
 });
 
-// ✅ 메뉴 기능 연결
-document.getElementById("profileBtn").addEventListener("click", () => {
-  alert("프로필 화면으로 이동합니다.");
+window.addEventListener("click", (e) => {
+  if (!menu.contains(e.target) && !userInfo.contains(e.target)) {
+    menu.classList.remove("show");
+    setTimeout(() => (menu.style.display = "none"), 200);
+  }
 });
+
+/* ✅ 프로필 변경 (파일 업로드) */
+const profileInput = document.getElementById("profileInput");
+document.getElementById("changeProfileBtn").addEventListener("click", () => {
+  profileInput.click(); // 파일 선택창 열기
+});
+
+profileInput.addEventListener("change", (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      document.getElementById("userImg").src = e.target.result;
+      const user = JSON.parse(localStorage.getItem("rideout_user")) || {};
+      user.picture = e.target.result; // base64 저장
+      localStorage.setItem("rideout_user", JSON.stringify(user));
+    };
+    reader.readAsDataURL(file); // 이미지 파일을 base64로 변환
+  }
+});
+
+/* ✅ 설정 버튼 */
 document.getElementById("settingsBtn").addEventListener("click", () => {
   alert("설정 페이지로 이동합니다.");
 });
+
+/* ✅ 로그아웃 버튼 */
 document.getElementById("logoutBtn").addEventListener("click", () => {
   localStorage.removeItem("rideout_user");
-  document.getElementById("userMenu").style.display = "none";
+  document.getElementById("userMenu").classList.remove("show");
+  setTimeout(() => (document.getElementById("userMenu").style.display = "none"), 200);
   alert("로그아웃 되었습니다.");
+  location.reload();
 });
 </script>
 </body>
