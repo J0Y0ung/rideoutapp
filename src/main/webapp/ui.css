@@ -225,11 +225,11 @@ footer {
 
 /* ✅ 로고 이미지 크기 설정 */
 .logo-img {
-  width: 50px;     /* ✅ 크기 2배로 확대 */
-  height: 50px;
+  width: 60px;     /* ✅ 크기 2배로 확대 */
+  height: 60px;
   object-fit: contain;
-  border-radius: 8px; /* 둥글게 보이게 유지 */
-  margin-right: 4px;  /* 글씨랑 간격 살짝 띄움 */
+  border-radius: 10px; /* 둥글게 보이게 유지 */
+  margin-right: 6px;  /* 글씨랑 간격 살짝 띄움 */
 }
 
 
