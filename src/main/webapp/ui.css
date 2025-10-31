@@ -225,10 +225,10 @@ footer {
 
 /* ✅ 로고 이미지 크기 설정 */
 .logo-img {
-  width: 26px;   /* 🔹로고 높이 약 26px (텍스트와 균형 맞음) */
-  height: 26px;
-  object-fit: contain; /* 이미지 비율 유지 */
-  border-radius: 6px;  /* 둥근 느낌 주고 싶으면 유지, 각지게 하고 싶으면 제거 */
+  width: auto;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 0;
 }
 
 /* 필요하면 살짝 키우고 싶을 때 (예시)
