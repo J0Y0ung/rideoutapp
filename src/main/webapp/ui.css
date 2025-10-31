@@ -157,9 +157,10 @@ footer {
 /* ===== 홈 아이콘 그리드 ===== */
 .app-icon-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 25px;
-  padding: 20px;
+  grid-template-columns: repeat(4, 1fr); /* 4열 고정 */
+  gap: 25px 18px; /* 세로 25px, 가로 18px 간격 */
+  padding: 25px 20px; /* 전체 패딩 균형 조정 */
+  justify-content: space-between; /* 🔥 양쪽 여백 자동 정렬 */
   justify-items: center;
   align-content: start;
 }
@@ -173,27 +174,27 @@ footer {
   animation: fadeUp 0.5s ease;
 }
 
-/* ✅ 아이콘 전용 박스 */
+/* ✅ 아이콘 전용 박스 (컴팩트 + 정렬 완벽 버전) */
 .app-icon-box {
   background: #111;
-  width: 70px;
-  height: 70px;
-  border-radius: 20px;
+  width: 55px;
+  height: 55px;
+  border-radius: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: 0.25s;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.45);
 }
 .app-icon-box:hover {
   background: #1c1c1c;
-  transform: scale(1.05);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+  transform: scale(1.08);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.6);
 }
 
-/* 아이콘 이미지 */
+/* 아이콘 크기 */
 .app-icon i {
-  font-size: 1.7rem;
+  font-size: 1.4rem;
   transition: 0.2s;
 }
 
@@ -206,8 +207,9 @@ footer {
   font-weight: 500;
 }
 
-/* ===== 아이콘 등장 애니메이션 ===== */
+/* ===== 등장 애니메이션 ===== */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
