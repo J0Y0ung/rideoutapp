@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>환영합니다</title>
+<link rel="stylesheet" href="ui.css">
+<style>
+body{display:flex;align-items:center;justify-content:center;height:100vh;background:#000;color:#fff;}
+.container{text-align:center;}
+.container img{width:80px;height:80px;border-radius:50%;margin-bottom:10px;}
+</style>
+</head>
+<body>
+<div class="container" id="welcomeBox">
+  <h2>로그인 중...</h2>
+</div>
+
+<script>
+const user = JSON.parse(localStorage.getItem('rideout_user')||'{}');
+const box = document.getElementById('welcomeBox');
+if(user.name){
+  box.innerHTML = `
+    <img src="${user.picture}" alt="프로필">
+    <h2>${user.name}님 환영합니다 👋</h2>
+    <p>잠시 후 홈으로 이동합니다...</p>
+  `;
+  setTimeout(()=>location.href='home.html',2000);
+}else{
+  location.href='login.html';
+}
+</script>
+</body>
+</html>
