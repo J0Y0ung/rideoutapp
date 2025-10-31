@@ -1,14 +1,51 @@
-<!DOCTYPE html><html lang="ko"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>비트 알람</title>
 <link rel="stylesheet" href="ui.css">
-</head><body>
-<main id="content">
-  <section style="padding:16px;">
-    <h2>비트 알람</h2>
-    <p>유튜브 링크를 알람으로 설정할 수 있습니다.</p>
-  </section>
-</main>
+</head>
+<body>
+
+<div class="status-bar">
+  <div class="signal-icons">
+    📶 <span>LTE</span> 📡
+  </div>
+  <div class="status-notch"></div>
+  <div class="signal-icons">
+    🕒 9:41 &nbsp; 🔋100%
+  </div>
+</div>
+
+<div class="status-bar">
+  <span>9:41</span>
+  <div class="status-notch"></div>
+  <span>🔋100%</span>
+</div>
+
+<div class="app">
+  <header>
+    <div class="logo">🔥 R!DE OUT · 비트 알람</div>
+    <div id="userInfo" class="user-info" style="display:none;">
+      <img id="userImg" src=""><span id="userName"></span>
+    </div>
+    <div id="logoutPopup" class="logout-popup">
+      <button id="logoutBtn">🚪 로그아웃</button>
+    </div>
+  </header>
+
+  <main id="content">
+    <section style="padding:16px;">
+      <h2>비트 알람</h2>
+      <p>사용자가 등록한 유튜브 링크로 알람을 재생할 수 있습니다.</p>
+    </section>
+  </main>
+
+  <footer><div class="tab-btn" id="homeBtn" title="Home"></div></footer>
+</div>
+
 <script src="ui.js"></script>
 <script>injectChrome('비트 알람');</script>
-</body></html>
+</body>
+</html>
