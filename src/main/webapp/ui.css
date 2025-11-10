@@ -166,14 +166,22 @@ main::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
 }
 
 /* ===== 하단 탭바 ===== */
-footer {
-  height: 70px; /* 조금 더 여유 공간 */
-  background: #111;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-top: 1px solid #333;
+/* ✅ 홈 버튼 강제 정사각형 적용 */
+footer .tab-btn {
+  width: 52px !important;
+  height: 52px !important;
+  background: #222 !important;
+  border-radius: 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: 0.25s !important;
 }
+
+/* 호버/눌림 반응 */
+footer .tab-btn:hover { background: #333 !important; }
+footer .tab-btn:active { transform: scale(0.92) !important; }
+
 
 /* ✅ 홈 버튼 정사각형 */
 .tab-btn {
