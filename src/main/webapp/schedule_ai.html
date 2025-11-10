@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AI 일정 정리</title>
+<link rel="stylesheet" href="ui.css">
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="logo">
+      <img src="images/logo.png" class="logo-img"><span>R!DE OUT · AI 일정 정리</span>
+    </div>
+    <div id="userInfo" class="user-info" style="display:none;">
+      <img id="userImg" src="images/defaultProfile.png"><span id="userName">USER</span>
+    </div>
+  </header>
+
+  <main id="content">
+    <div class="section-title">시간 순 정리</div>
+    <div class="section-sub">등록된 내용을 시간 흐름에 맞춰 보여줍니다</div>
+
+    <div id="list" class="list"></div>
+    <div id="pager" class="pager"></div>
+  </main>
+
+  <footer><div class="tab-btn" onclick="location.href='schedule.html'"></div></footer>
+</div>
+
+<script>
+const KEY='RIDEOUT_SCHEDULES';
+const PAGE=4;
+let page=1, total=0;
+
+function read(){ return JSON.parse(localStorage.getItem(KEY)||'[]'); }
+
+function render(){
+  const data = read().slice().reverse(); // 오래된 것 → 최신순이 되도록 반전
+  total = Math.ceil(data.length / PAGE) || 1;
+  if(page>total) page=total;
+
+  const seg = data.slice((page-1)*PAGE, page*PAGE);
+  const list = document.getElementById('list');
+  list.innerHTML = seg.map(it=>`
+    <div class="item">
+      <div>${it.text}</div>
+      <div class="meta">${new Date(it.createdAt).toLocaleString()}</div>
+    </div>`).join('') || '<div class="meta">등록된 일정이 없습니다.</div>';
+
+  const p=document.getElementById('pager');
+  p.innerHTML = `
+    <button ${page<=1?'disabled':''} onclick="move(-1)">이전</button>
+    <span class="meta"> ${page} / ${total} </span>
+    <button ${page>=total?'disabled':''} onclick="move(1)">다음</button>
+  `;
+}
+function move(d){ page += d; render(); }
+render();
+</script>
+</body>
+</html>

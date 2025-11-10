@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>스마트 알람</title>
+<link rel="stylesheet" href="ui.css">
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="logo">
+      <img src="images/logo.png" class="logo-img"><span>R!DE OUT · 스마트 알람</span>
+    </div>
+    <div id="userInfo" class="user-info" style="display:none;">
+      <img id="userImg" src="images/defaultProfile.png"><span id="userName">USER</span>
+    </div>
+  </header>
+
+  <main id="content">
+    <div class="section-title">스마트 알람</div>
+    <div class="section-sub">일정 시작 1시간 전에 알려줄 수 있어요</div>
+
+    <div id="list" class="list"></div>
+  </main>
+
+  <footer><div class="tab-btn" onclick="location.href='schedule.html'"></div></footer>
+
+  <!-- 서랍: 비트 선택 -->
+  <div class="drawer" id="drawer">
+    <h3>알람에 사용할 비트 선택</h3>
+    <div id="songs"></div>
+  </div>
+</div>
+
+<script>
+const SKEY='RIDEOUT_SCHEDULES';
+const AKEY='RIDEOUT_ALARMS';        // { [id]: true/false }
+const SMAP='ALARM_SONG_MAP';         // { [id]: url }
+const BKEY='BEAT_ALARM_SONGS';       // [{title,url}] — 비트알람에서 저장했다고 가정
+
+let currentScheduleId = null;
+
+function read(k){ return JSON.parse(localStorage.getItem(k)|| (k===BKEY?'[]':'{}') ); }
+function write(k,v){ localStorage.setItem(k, JSON.stringify(v)); }
+
+function renderList(){
+  const arr = JSON.parse(localStorage.getItem(SKEY)||'[]').slice().reverse();
+  const alarms = read(AKEY);
+  const map = read(SMAP);
+  const box = document.getElementById('list');
+
+  box.innerHTML = arr.map(it=>{
+    const on = !!alarms[it.id];
+    const song = map[it.id] ? `<a href="${map[it.id]}" target="_blank">곡 링크</a>` : '미설정';
+    return `
+      <div class="item">
+        <div class="row">
+          <div>
+            <div>${it.text}</div>
+            <div class="meta">알람: ${on?'켜짐':'꺼짐'} · 곡: ${song}</div>
+          </div>
+          <div class="row" style="gap:8px;">
+            <div class="toggle ${on?'on':''}" onclick="toggleAlarm(${it.id})"></div>
+            <button class="boombtn" onclick="openDrawer(${it.id})">∨</button>
+          </div>
+        </div>
+      </div>`;
+  }).join('') || '<div class="meta">등록된 일정이 없습니다.</div>';
+}
+
+function toggleAlarm(id){
+  const alarms = read(AKEY);
+  alarms[id] = !alarms[id];
+  write(AKEY,alarms);
+  renderList();
+}
+
+function openDrawer(id){
+  currentScheduleId = id;
+  const d=document.getElementById('drawer'); d.classList.add('show');
+  const songs = read(BKEY);
+  const box = document.getElementById('songs');
+  if(!songs.length){
+    box.innerHTML = '<div class="meta">저장된 비트가 없습니다. (비트 알람에서 추가)</div>';
+    return;
+  }
+  box.innerHTML = songs.map(s=>`
+    <div class="song">
+      <a href="${s.url}" target="_blank">${s.title}</a>
+      <button onclick="selectSong('${encodeURIComponent(s.url)}')">적용</button>
+    </div>
+  `).join('');
+}
+function selectSong(encUrl){
+  const url = decodeURIComponent(encUrl);
+  const map = read(SMAP);
+  map[currentScheduleId]=url;
+  write(SMAP,map);
+  closeDrawer();
+  renderList();
+}
+
+function closeDrawer(){
+  const d=document.getElementById('drawer'); d.classList.remove('show');
+}
+window.addEventListener('click', (e)=>{
+  const d=document.getElementById('drawer');
+  if(d.classList.contains('show') && !d.contains(e.target)){
+    closeDrawer();
+  }
+});
+
+renderList();
+</script>
+</body>
+</html>
