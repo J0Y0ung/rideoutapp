@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>R!DE OUT • 설정</title>
+<link rel="stylesheet" href="ui.css" />
+<style>
+  /* 페이지 전용 보조 스타일 */
+  .settings { padding: 16px 20px; display: grid; gap: 18px; }
+  .card {
+    background:#0f0f0f; border:1px solid #222; border-radius:16px;
+    padding:16px; display:grid; gap:12px;
+  }
+  .card h3 { font-size:1rem; font-weight:700; }
+  .row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .hint { color:#aaa; font-size:.85rem; }
+  .savebar { display:flex; gap:10px; }
+  .btn {
+    background:#222; border:1px solid #333; color:#fff; padding:10px 14px;
+    border-radius:10px; cursor:pointer; transition:.2s;
+  }
+  .btn:hover { background:#2b2b2b; }
+  .btn.danger { border-color:#5a2a2a; background:#1b0f0f; }
+  .chip {
+    padding:8px 10px; border:1px solid #333; border-radius:8px; cursor:pointer;
+  }
+  input[type="file"]{ display:none; }
+  .preview { width:44px; height:44px; border-radius:50%; object-fit:cover; border:1px solid #333; }
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- 헤더 -->
+  <header>
+    <div class="logo">
+      <img src="images/logo.png" alt="logo" class="logo-img" />
+      <span>R!DE OUT · 설정</span>
+    </div>
+
+    <div id="userInfo" class="user-info" style="display:none;">
+      <img id="userImg" src="images/defaultProfile.png" alt="profile" />
+      <span id="userName">USER</span>
+    </div>
+  </header>
+
+  <!-- 본문 -->
+  <main id="content">
+    <section class="settings">
+
+      <!-- 테마 -->
+      <div class="card">
+        <h3>테마</h3>
+        <div class="row">
+          <label class="chip"><input type="radio" name="theme" value="dark" /> 다크</label>
+          <label class="chip"><input type="radio" name="theme" value="light" /> 라이트</label>
+        </div>
+        <div class="row">
+          <label>포인트 색상</label>
+          <input type="color" id="accentPicker" value="#8a7cff" />
+        </div>
+        <p class="hint">테마/포인트 색은 즉시 적용되며, 모든 페이지에서 유지됩니다.</p>
+      </div>
+
+      <!-- 알림 -->
+      <div class="card">
+        <h3>알림</h3>
+        <label class="row">
+          <input type="checkbox" id="notifBeat" /> 비트 알람 허용
+        </label>
+        <label class="row">
+          <input type="checkbox" id="notifRhyme" /> 매일 라임 추천 알림
+        </label>
+        <p class="hint">브라우저 알림 권한이 필요할 수 있어요.</p>
+      </div>
+
+      <!-- 프로필 이미지 -->
+      <div class="card">
+        <h3>프로필 이미지</h3>
+        <div class="row">
+          <img id="preview" class="preview" src="images/defaultProfile.png" alt="preview" />
+          <button id="btnUpload" class="btn">이미지 업로드</button>
+          <button id="btnResetProfile" class="btn">기본 이미지로</button>
+        </div>
+        <input type="file" id="profileInput" accept="image/*" />
+        <p class="hint">업로드한 이미지는 로컬에 저장되어 로그인 시 자동 표시됩니다.</p>
+      </div>
+
+      <!-- 저장/초기화 -->
+      <div class="savebar">
+        <button id="btnSave" class="btn">저장</button>
+        <button id="btnResetAll" class="btn danger">모든 설정 초기화</button>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- 하단 탭(홈으로) -->
+  <footer>
+    <div class="tab-btn" id="homeBtn" title="Home"></div>
+  </footer>
+</div>
+
+<script>
+/* ===== 공통: 홈 이동 ===== */
+document.getElementById("homeBtn").addEventListener("click",()=>location.href="home.html");
+
+/* ===== 사용자 표시 ===== */
+(function initUser(){
+  const user = JSON.parse(localStorage.getItem("rideout_user"));
+  const userInfo = document.getElementById("userInfo");
+  const img = document.getElementById("userImg");
+  const name = document.getElementById("userName");
+  const preview = document.getElementById("preview");
+
+  if(user){
+    name.textContent = user.name || "USER";
+    img.src = user.picture || "images/defaultProfile.png";
+    preview.src = img.src;
+    userInfo.style.display = "flex";
+  } else {
+    userInfo.style.display = "none";
+    preview.src = "images/defaultProfile.png";
+  }
+})();
+
+/* ===== 설정 로드 & 실시간 반영 ===== */
+const THEME_KEY = "rideout_theme";         // 'dark' | 'light'
+const ACCENT_KEY = "rideout_accent";       // hex color
+const NOTIF_KEY  = "rideout_notifications"; // { beatAlarm:boolean, dailyRhyme:boolean }
+
+const themeRadios = [...document.querySelectorAll('input[name="theme"]')];
+const accentPicker = document.getElementById("accentPicker");
+const notifBeat = document.getElementById("notifBeat");
+const notifRhyme = document.getElementById("notifRhyme");
+
+/* 변수 반영 함수 */
+function applyTheme(theme){
+  const root = document.documentElement;
+  if(theme === "light"){
+    root.style.setProperty("--bg", "#f7f7f7");
+    root.style.setProperty("--fg", "#111");
+  }else{
+    root.style.setProperty("--bg", "#000");
+    root.style.setProperty("--fg", "#fff");
+  }
+}
+function applyAccent(color){
+  document.documentElement.style.setProperty("--accent", color || "#8a7cff");
+}
+
+/* 저장된 값 로드 */
+(function loadSettings(){
+  const theme = localStorage.getItem(THEME_KEY) || "dark";
+  const accent = localStorage.getItem(ACCENT_KEY) || "#8a7cff";
+  const notif = JSON.parse(localStorage.getItem(NOTIF_KEY) || "{}");
+
+  themeRadios.forEach(r => r.checked = (r.value === theme));
+  accentPicker.value = /^#/.test(accent)? accent : "#8a7cff";
+  notifBeat.checked = !!notif.beatAlarm;
+  notifRhyme.checked = !!notif.dailyRhyme;
+
+  applyTheme(theme);
+  applyAccent(accent);
+})();
+
+/* 변경 즉시 미리 적용 */
+themeRadios.forEach(r => r.addEventListener("change", e => applyTheme(e.target.value)));
+accentPicker.addEventListener("input", e => applyAccent(e.target.value));
+
+/* 저장 버튼 */
+document.getElementById("btnSave").addEventListener("click", ()=>{
+  const theme = themeRadios.find(r=>r.checked)?.value || "dark";
+  const accent = accentPicker.value || "#8a7cff";
+  const notif = { beatAlarm: notifBeat.checked, dailyRhyme: notifRhyme.checked };
+
+  localStorage.setItem(THEME_KEY, theme);
+  localStorage.setItem(ACCENT_KEY, accent);
+  localStorage.setItem(NOTIF_KEY, JSON.stringify(notif));
+
+  alert("설정을 저장했어요.");
+});
+
+/* 전체 초기화 */
+document.getElementById("btnResetAll").addEventListener("click", ()=>{
+  if(!confirm("모든 설정을 초기화할까요?")) return;
+  localStorage.removeItem(THEME_KEY);
+  localStorage.removeItem(ACCENT_KEY);
+  localStorage.removeItem(NOTIF_KEY);
+  // 프로필은 유지 (원하면 rideout_user도 제거)
+  applyTheme("dark");
+  applyAccent("#8a7cff");
+  themeRadios.forEach(r => r.checked = (r.value === "dark"));
+  accentPicker.value = "#8a7cff";
+  notifBeat.checked = false;
+  notifRhyme.checked = false;
+  alert("초기화 완료!");
+});
+
+/* 프로필 업로드 */
+const profileInput = document.getElementById("profileInput");
+document.getElementById("btnUpload").addEventListener("click", ()=>profileInput.click());
+profileInput.addEventListener("change", (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev)=>{
+    const dataUrl = ev.target.result;
+    document.getElementById("preview").src = dataUrl;
+    document.getElementById("userImg").src = dataUrl;
+    const user = JSON.parse(localStorage.getItem("rideout_user") || "{}");
+    user.picture = dataUrl;
+    if(!user.name) user.name = "USER";
+    localStorage.setItem("rideout_user", JSON.stringify(user));
+  };
+  reader.readAsDataURL(file);
+});
+
+/* 기본 이미지로 */
+document.getElementById("btnResetProfile").addEventListener("click", ()=>{
+  const def = "images/defaultProfile.png";
+  document.getElementById("preview").src = def;
+  document.getElementById("userImg").src = def;
+  const user = JSON.parse(localStorage.getItem("rideout_user") || "{}");
+  user.picture = def;
+  if(!user.name) user.name = "USER";
+  localStorage.setItem("rideout_user", JSON.stringify(user));
+});
+</script>
+</body>
+</html>
