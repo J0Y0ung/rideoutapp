@@ -11,26 +11,19 @@
 <div class="app">
 
   <!-- ===== 상단 헤더 ===== -->
-  <header>
-    <!-- 🔹 왼쪽: 로고 + 이름 -->
+<header>
   <img src="images/logo.png" class="logo-img-left">
-
   <div class="logo-title">R!DE OUT</div>
+  <div id="userInfo" class="user-info">
+    <img id="userImg"><span id="userName"></span>
+  </div>
+  <div id="userMenu" class="user-menu">
+    <button id="changeProfileBtn">🖼️ 프로필 변경</button>
+    <button id="settingsBtn">⚙️ 설정</button>
+    <button id="logoutBtn">🚪 로그아웃</button>
+  </div>
+</header>
 
-
-    <!-- 🔹 오른쪽: 프로필 -->
-    <div id="userInfo" class="user-info" style="display:none;">
-      <img id="userImg" src="images/defaultProfile.png" alt="profile">
-      <span id="userName">USER</span>
-    </div>
-
-    <!-- 🔹 프로필 클릭 시 드롭다운 메뉴 -->
-    <div id="userMenu" class="user-menu">
-      <button id="changeProfileBtn">🖼️ 프로필 변경</button>
-      <button id="settingsBtn">⚙️ 설정</button>
-      <button id="logoutBtn">🚪 로그아웃</button>
-    </div>
-  </header>
 
   <!-- ===== 메인 콘텐츠 ===== -->
   <main id="content">
