@@ -1,61 +1,52 @@
-<!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>AI 일정 정리</title>
-<link rel="stylesheet" href="ui.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>R!DE OUT • AI 일정 정리</title>
+<link rel="stylesheet" href="ui.css" />
+<style>
+.wrap{padding:20px;display:grid;gap:12px}
+.list{display:grid;gap:10px}
+.card{background:#0f0f0f;border:1px solid #222;border-radius:14px;padding:12px}
+.row{display:flex;justify-content:space-between;gap:8px}
+.muted{color:#9aa0a6;font-size:.85rem}
+.pager{display:flex;justify-content:center;gap:8px;margin-top:8px}
+.btn{background:#1a1a1a;border:1px solid #333;border-radius:10px;color:#fff;padding:8px 12px;cursor:pointer}
+</style>
 </head>
 <body>
 <div class="app">
-  <header>
-    <div class="logo">
-      <img src="images/logo.png" class="logo-img"><span>R!DE OUT · AI 일정 정리</span>
-    </div>
-    <div id="userInfo" class="user-info" style="display:none;">
-      <img id="userImg" src="images/defaultProfile.png"><span id="userName">USER</span>
-    </div>
-  </header>
-
-  <main id="content">
-    <div class="section-title">시간 순 정리</div>
-    <div class="section-sub">등록된 내용을 시간 흐름에 맞춰 보여줍니다</div>
-
-    <div id="list" class="list"></div>
-    <div id="pager" class="pager"></div>
-  </main>
-
-  <footer><div class="tab-btn" onclick="location.href='schedule.html'"></div></footer>
+<header><div class="logo">🤖 AI 일정 정리</div></header>
+<main class="wrap">
+<div id="list" class="list"></div>
+<div class="pager">
+<button class="btn" id="prev">이전</button>
+<button class="btn" id="next">다음</button>
 </div>
-
+</main>
+<div class="tabbar-wrap"><button class="home-btn" onclick="location.href='home.html'"></button></div>
+</div>
 <script>
-const KEY='RIDEOUT_SCHEDULES';
+const KEY='rideout_schedules';
 const PAGE=4;
-let page=1, total=0;
-
-function read(){ return JSON.parse(localStorage.getItem(KEY)||'[]'); }
-
+let page=0;
 function render(){
-  const data = read().slice().reverse(); // 오래된 것 → 최신순이 되도록 반전
-  total = Math.ceil(data.length / PAGE) || 1;
-  if(page>total) page=total;
-
-  const seg = data.slice((page-1)*PAGE, page*PAGE);
-  const list = document.getElementById('list');
-  list.innerHTML = seg.map(it=>`
-    <div class="item">
-      <div>${it.text}</div>
-      <div class="meta">${new Date(it.createdAt).toLocaleString()}</div>
-    </div>`).join('') || '<div class="meta">등록된 일정이 없습니다.</div>';
-
-  const p=document.getElementById('pager');
-  p.innerHTML = `
-    <button ${page<=1?'disabled':''} onclick="move(-1)">이전</button>
-    <span class="meta"> ${page} / ${total} </span>
-    <button ${page>=total?'disabled':''} onclick="move(1)">다음</button>
-  `;
+const arr=(JSON.parse(localStorage.getItem(KEY)||'[]'))
+.sort((a,b)=>new Date(a.when)-new Date(b.when));
+const start=page*PAGE; const end=start+PAGE;
+const slice=arr.slice(start,end);
+const el=document.getElementById('list');
+el.innerHTML = slice.map(it=>{
+const d=new Date(it.when);
+const time = d.toLocaleString();
+return `<div class='card'><div class='row'><b>${it.title}</b><span class='muted'>${time}</span></div>${it.note?`<div class='muted'>${it.note}</div>`:''}</div>`
+}).join('') || "<div class='muted'>등록된 일정이 없습니다.</div>";
 }
-function move(d){ page += d; render(); }
+document.getElementById('prev').onclick=()=>{ if(page>0){page--;render();}}
+document.getElementById('next').onclick=()=>{
+const arr=JSON.parse(localStorage.getItem(KEY)||'[]');
+if((page+1)*PAGE < arr.length){page++;render();}
+}
 render();
 </script>
 </body>

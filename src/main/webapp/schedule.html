@@ -1,30 +1,33 @@
-<!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>일정 관리</title>
-<link rel="stylesheet" href="ui.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>R!DE OUT • 일정 관리</title>
+<link rel="stylesheet" href="ui.css" />
+<style>
+.section {padding:20px}
+.title {font-size:1.2rem;font-weight:800}
+.subtitle {color:#9aa0a6;margin-top:6px}
+.opt-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:16px}
+.opt{background:#0f0f0f;border:1px solid #222;border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.opt span{font-weight:700}
+</style>
 </head>
 <body>
 <div class="app">
-  <header>
-    <div class="logo-title">📅 Schedule Management</div>
-  </header>
-
-  <main style="padding:25px; text-align:center;">
-    <p style="color:#888; font-size:0.85rem;">스마트한 하루의 시작</p>
-
-    <div class="icon-grid" style="margin-top:40px; grid-template-columns:1fr;">
-      <button class="icon-btn" onclick="location.href='schedule_add.html'">일정 등록</button>
-      <button class="icon-btn" onclick="location.href='schedule_ai.html'">AI 일정 정리</button>
-      <button class="icon-btn" onclick="location.href='schedule_alarm.html'">스마트 알람</button>
-    </div>
-  </main>
-
-  <div class="tabbar-wrap">
-    <button class="home-btn" onclick="location.href='main.html'"></button>
-  </div>
+<header>
+<div class="logo">📅 R!DE OUT</div>
+</header>
+<main class="section">
+<div class="title">Schedule Management</div>
+<div class="subtitle">스마트한 하루의 시작</div>
+<div class="opt-grid">
+<div class="opt" onclick="location.href='schedule-add.html'"><span>일정 등록</span> ▶️</div>
+<div class="opt" onclick="location.href='schedule-ai.html'"><span>AI 일정 정리</span> 🤖</div>
+<div class="opt" onclick="location.href='schedule-alarm.html'"><span>스마트 알람</span> ⏰</div>
+</div>
+</main>
+<div class="tabbar-wrap"><button class="home-btn" onclick="location.href='home.html'"></button></div>
 </div>
 </body>
 </html>
