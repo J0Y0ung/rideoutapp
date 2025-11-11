@@ -6,21 +6,6 @@
 <title>R!DE OUT • 스마트 알람</title>
 <link rel="stylesheet" href="ui.css" />
 <style>
-  .tabbar-wrap{width:100%;background:rgba(20,20,20,0.6);backdrop-filter:blur(12px);padding:10px 0;display:flex;justify-content:center;align-items:center;border-top:1px solid rgba(255,255,255,0.1);margin-top:auto}
-  .home-btn{width:48px;height:48px;background:rgba(60,60,60,0.8);border:1px solid #555;border-radius:12px;cursor:pointer;transition:.2s;display:block;margin:0 auto}
-  .home-btn:hover{background:rgba(120,120,120,0.8);border-color:var(--accent)}
-  .wrap{padding:20px;display:grid;gap:12px}
-  .row{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#0f0f0f;border:1px solid #222;border-radius:14px;padding:12px}
-  .muted{color:#9aa0a6}
-  .toggle{appearance:none;width:44px;height:24px;background:#333;border-radius:999px;position:relative;cursor:pointer;outline:none;border:1px solid #444}
-  .toggle:checked{background:#3a2e6e}
-  .toggle:before{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.2s}
-  .toggle:checked:before{left:22px}
-  .drawer{position:fixed;left:50%;transform:translateX(-50%);bottom:-60%;width:100%;max-width:430px;background:#0f0f0f;border:1px solid #222;border-top-left-radius:16px;border-top-right-radius:16px;box-shadow:0 -6px 24px rgba(0,0,0,.6);padding:14px;transition:.3s}
-  .drawer.show{bottom:0}
-  .boomerang{border:1px solid #444;background:#1a1a1a;color:#fff;border-radius:10px;padding:8px 10px;cursor:pointer}
-  .list{display:grid;gap:8px;margin-top:8px}
-  .btn{border:1px solid #444;background:#1a1a1a;color:#fff;border-radius:8px;padding:6px 10px;cursor:pointer}
   .wrap{padding:20px;display:grid;gap:12px}
   .row{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#0f0f0f;border:1px solid #222;border-radius:14px;padding:12px}
   .muted{color:#9aa0a6}
@@ -49,108 +34,86 @@
   </main>
   <div class="tabbar-wrap"><button class="home-btn" onclick="location.href='home.html'"></button></div>
 </div>
+
 <script>
-  // ===== 안전 파서 =====
-  function safeParse(key, fallback){
-    try{ const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
-    catch(e){ console.warn('JSON parse error for', key, e); return fallback; }
-  }
+  /* 안전 파서 */
+  function safeParse(key, fallback){ try{const v=localStorage.getItem(key); return v?JSON.parse(v):fallback;}catch(e){return fallback;} }
 
-  const KEY  = 'rideout_schedules';      // 일정
-  const ALARM= 'rideout_alarm';           // 알람 상태(일정ID -> 비트 객체|null)
-  const BEATS= 'rideout_beats';           // 저장된 비트 리스트
+  const KEY='rideout_schedules';        // 일정
+  const ALARM='rideout_alarm';           // 일정ID -> 비트객체|null
+  const BEATS='rideout_beats';           // 저장된 비트(데모)
 
-  // 데모용 기본 비트(최초 1회)
+  /* 데모 비트(최초 1회) */
   if(!localStorage.getItem(BEATS)){
     localStorage.setItem(BEATS, JSON.stringify([
       {id:1,title:'Lo-fi chill beat', url:'https://youtu.be/dummy1'},
-      {id:2,title:'Bouncy Trap',      url:'https://youtu.be/dummy2'},
+      {id:2,title:'Bouncy Trap', url:'https://youtu.be/dummy2'},
       {id:3,title:'Old School Boom Bap', url:'https://youtu.be/dummy3'}
     ]));
   }
 
-  // 전역 상태 (객체 자체는 const여도 속성 변경 가능)
   const alarmMap = safeParse(ALARM, {});
 
-  // ===== 렌더링 =====
+  /* 렌더링 */
   function render(){
-    const arr = safeParse(KEY, []).sort((a,b)=> new Date(a.when) - new Date(b.when));
-    const list = document.getElementById('alarmList');
-    if(!list){ return; }
-
-    if(!arr.length){ list.innerHTML = '<div class="muted">등록된 일정이 없습니다.</div>'; return; }
-
+    const arr=(safeParse(KEY, [])).sort((a,b)=>new Date(a.when)-new Date(b.when));
+    const list=document.getElementById('alarmList');
+    if(!arr.length){ list.innerHTML='<div class="muted">등록된 일정이 없습니다.</div>'; return; }
     list.innerHTML = arr.map(it=>{
-      const d = new Date(it.when);
-      const time = isNaN(d.getTime()) ? '-' : d.toLocaleString();
-      const beat = alarmMap[it.id];
-      const beatTitle = beat && beat.title ? beat.title : '노래 미지정';
-      const checked = beat ? 'checked' : '';
-      return `<div class='row'>
+      const d=new Date(it.when), time=isNaN(d)?'-':d.toLocaleString();
+      const beat=alarmMap[it.id], beatTitle=beat&&beat.title?beat.title:'노래 미지정';
+      const checked = beat? 'checked':'';
+      return `<div class="row">
         <div>
-          <div><b>${(it.title||'무제')}</b></div>
-          <div class='muted'>${time} · ${beatTitle}</div>
+          <div><b>${it.title||'무제'}</b></div>
+          <div class="muted">${time} · ${beatTitle}</div>
         </div>
-        <input type='checkbox' class='toggle' data-id='${it.id}' ${checked} />
-      </div>`
+        <input type="checkbox" class="toggle" data-id="${it.id}" ${checked}/>
+      </div>`;
     }).join('');
 
-    // 토글 이벤트 바인딩(재렌더마다 갱신)
     list.querySelectorAll('.toggle').forEach(el=>{
       el.addEventListener('change', (e)=>{
-        const id = String(e.target.getAttribute('data-id'));
-        if(e.target.checked){
-          // 켜기만 하면 임시로 null 세팅(비트는 별도로 서랍에서 지정)
-          alarmMap[id] = alarmMap[id] || null;
-        }else{
-          delete alarmMap[id];
-        }
+        const id=String(e.target.getAttribute('data-id'));
+        if(e.target.checked){ alarmMap[id]=alarmMap[id]||null; } else { delete alarmMap[id]; }
         localStorage.setItem(ALARM, JSON.stringify(alarmMap));
       });
     });
   }
 
-  // ===== Drawer(서랍) : 저장된 비트 적용 =====
-  const openDrawer = document.getElementById('openDrawer');
-  const drawer     = document.getElementById('drawer');
-  const closeDrawer= document.getElementById('closeDrawer');
-  const beatList   = document.getElementById('beatList');
+  /* Drawer */
+  const openDrawer=document.getElementById('openDrawer');
+  const drawer=document.getElementById('drawer');
+  const closeDrawer=document.getElementById('closeDrawer');
+  const beatList=document.getElementById('beatList');
 
-  if(openDrawer){
-    openDrawer.onclick = ()=>{
-      const beats = safeParse(BEATS, []);
-      if(beatList){
-        beatList.innerHTML = beats.map(b=>`<div class='row' style='gap:10px'>
-          <div><b>${b.title}</b><div class='muted'>${b.url}</div></div>
-          <button class='btn' data-beat='${b.id}'>적용</button>
-        </div>`).join('') || '<div class="muted">등록된 비트가 없습니다.</div>';
+  openDrawer.onclick=()=>{
+    const beats = safeParse(BEATS, []);
+    beatList.innerHTML = beats.map(b=>`<div class="row" style="gap:10px">
+      <div><b>${b.title}</b><div class="muted">${b.url}</div></div>
+      <button class="btn" data-beat="${b.id}">적용</button>
+    </div>`).join('') || '<div class="muted">등록된 비트가 없습니다.</div>';
 
-        // 적용 버튼 리스너
-        beatList.querySelectorAll('.btn').forEach(btn=>{
-          btn.onclick = (e)=>{
-            const beatId = Number(e.currentTarget.getAttribute('data-beat'));
-            const beats  = safeParse(BEATS, []);
-            const beat   = beats.find(x=>x.id===beatId);
-            if(!beat){ alert('비트를 찾을 수 없습니다.'); return; }
+    beatList.querySelectorAll('.btn').forEach(btn=>{
+      btn.onclick=(e)=>{
+        const beatId = Number(e.currentTarget.getAttribute('data-beat'));
+        const beats = safeParse(BEATS, []);
+        const beat  = beats.find(x=>x.id===beatId);
+        if(!beat){ alert('비트를 찾을 수 없습니다.'); return; }
+        const schedules = (safeParse(KEY, [])).sort((a,b)=>new Date(a.when)-new Date(b.when));
+        if(!schedules.length){ alert('일정이 없습니다.'); return; }
+        const target = schedules[0]; // 데모: 가장 가까운 일정에 적용
+        alarmMap[target.id] = beat;
+        localStorage.setItem(ALARM, JSON.stringify(alarmMap));
+        alert(`'${target.title}'에 노래가 적용되었습니다.`);
+        render();
+      };
+    });
 
-            // 가장 가까운(미래 기준) 일정에 적용
-            const schedules = safeParse(KEY, []).sort((a,b)=> new Date(a.when) - new Date(b.when));
-            if(!schedules.length){ alert('일정이 없습니다.'); return; }
-            const target = schedules[0];
+    drawer.classList.add('show');
+  };
+  closeDrawer.onclick=()=> drawer.classList.remove('show');
 
-            alarmMap[target.id] = beat; // 지정
-            localStorage.setItem(ALARM, JSON.stringify(alarmMap));
-            alert(`'${target.title}'에 노래가 적용되었습니다.`);
-            render();
-          }
-        });
-      }
-      if(drawer){ drawer.classList.add('show'); }
-    }
-  }
-  if(closeDrawer){ closeDrawer.onclick = ()=> drawer && drawer.classList.remove('show'); }
-
-  // 초기 렌더
   render();
 </script>
 </body>
