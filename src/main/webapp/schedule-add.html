@@ -6,44 +6,54 @@
 <title>R!DE OUT • 일정 등록</title>
 <link rel="stylesheet" href="ui.css" />
 <style>
-.wrap{padding:20px;display:grid;gap:12px}
-.field{background:#0f0f0f;border:1px solid #222;border-radius:14px;padding:14px}
-.field input, .field textarea{width:100%;background:transparent;border:none;outline:none;color:#fff;font-size:1rem}
-.row{display:flex;gap:10px}
-.btn{flex:1;background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:12px;color:#fff;cursor:pointer}
-.btn.primary{background:#2d2548;border-color:#4e3ea3}
-.hint{color:#9aa0a6;font-size:.85rem}
+  .tabbar-wrap{width:100%;background:rgba(20,20,20,0.6);backdrop-filter:blur(12px);padding:10px 0;display:flex;justify-content:center;align-items:center;border-top:1px solid rgba(255,255,255,0.1);margin-top:auto}
+  .home-btn{width:48px;height:48px;background:rgba(60,60,60,0.8);border:1px solid #555;border-radius:12px;cursor:pointer;transition:.2s;display:block;margin:0 auto}
+  .home-btn:hover{background:rgba(120,120,120,0.8);border-color:var(--accent)}
+  .wrap{padding:20px;display:grid;gap:12px}
+  .field{background:#0f0f0f;border:1px solid #222;border-radius:14px;padding:14px}
+  .field input, .field textarea{width:100%;background:transparent;border:none;outline:none;color:#fff;font-size:1rem}
+  .row{display:flex;gap:10px}
+  .btn{flex:1;background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:12px;color:#fff;cursor:pointer}
+  .btn.primary{background:#2d2548;border-color:#4e3ea3}
+  .hint{color:#9aa0a6;font-size:.85rem}
+  .wrap{padding:20px;display:grid;gap:12px}
+  .field{background:#0f0f0f;border:1px solid #222;border-radius:14px;padding:14px}
+  .field input, .field textarea{width:100%;background:transparent;border:none;outline:none;color:#fff;font-size:1rem}
+  .row{display:flex;gap:10px}
+  .btn{flex:1;background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:12px;color:#fff;cursor:pointer}
+  .btn.primary{background:#2d2548;border-color:#4e3ea3}
+  .hint{color:#9aa0a6;font-size:.85rem}
 </style>
 </head>
 <body>
 <div class="app">
-<header><div class="logo">📝 일정 등록</div></header>
-<main class="wrap">
-<div class="field"><input id="title" placeholder="제목 (예: 힙합 클럽 공연 )"/></div>
-<div class="field"><input id="when" type="datetime-local"/></div>
-<div class="field"><textarea id="note" rows="4" placeholder="메모 (선택)"></textarea></div>
-<div class="row">
-<button class="btn" onclick="location.href='schedule.html'">취소</button>
-<button class="btn primary" id="sendBtn">▶️ 등록</button>
-</div>
-<div class="hint">* 등록된 일정은 AI 일정 정리/스마트 알람에서 확인할 수 있어요.</div>
-</main>
-<div class="tabbar-wrap"><button class="home-btn" onclick="location.href='home.html'"></button></div>
+  <header><div class="logo">📝 일정 등록</div></header>
+  <main class="wrap">
+    <div class="field"><input id="title" placeholder="제목 (예: 수학 보충 수업)"/></div>
+    <div class="field"><input id="when" type="datetime-local"/></div>
+    <div class="field"><textarea id="note" rows="4" placeholder="메모 (선택)"></textarea></div>
+    <div class="row">
+      <button class="btn" onclick="location.href='schedule.html'">취소</button>
+      <button class="btn primary" id="sendBtn">▶️ 등록</button>
+    </div>
+    <div class="hint">* 등록된 일정은 AI 일정 정리/스마트 알람에서 확인할 수 있어요.</div>
+  </main>
+  <div class="tabbar-wrap"><button class="home-btn" onclick="location.href='home.html'"></button></div>
 </div>
 <script>
-const KEY = 'rideout_schedules';
-document.getElementById('sendBtn').addEventListener('click', ()=>{
-const title = document.getElementById('title').value.trim();
-const when = document.getElementById('when').value;
-const note = document.getElementById('note').value.trim();
-if(!title || !when){ alert('제목과 시간을 입력해 주세요.'); return; }
-const arr = JSON.parse(localStorage.getItem(KEY)||'[]');
-const item = { id:Date.now(), title, when:new Date(when).toISOString(), note };
-arr.push(item);
-localStorage.setItem(KEY, JSON.stringify(arr));
-alert('일정이 등록되었어요.');
-location.href = 'schedule.html';
-});
+  const KEY = 'rideout_schedules';
+  document.getElementById('sendBtn').addEventListener('click', ()=>{
+    const title = document.getElementById('title').value.trim();
+    const when = document.getElementById('when').value;
+    const note  = document.getElementById('note').value.trim();
+    if(!title || !when){ alert('제목과 시간을 입력해 주세요.'); return; }
+    const arr = JSON.parse(localStorage.getItem(KEY)||'[]');
+    const item = { id:Date.now(), title, when:new Date(when).toISOString(), note };
+    arr.push(item);
+    localStorage.setItem(KEY, JSON.stringify(arr));
+    alert('일정이 등록되었어요.');
+    location.href = 'schedule.html';
+  });
 </script>
 </body>
 </html>

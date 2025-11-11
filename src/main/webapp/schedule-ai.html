@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
@@ -5,49 +6,59 @@
 <title>R!DE OUT • AI 일정 정리</title>
 <link rel="stylesheet" href="ui.css" />
 <style>
-.wrap{padding:20px;display:grid;gap:12px}
-.list{display:grid;gap:10px}
-.card{background:#0f0f0f;border:1px solid #222;border-radius:14px;padding:12px}
-.row{display:flex;justify-content:space-between;gap:8px}
-.muted{color:#9aa0a6;font-size:.85rem}
-.pager{display:flex;justify-content:center;gap:8px;margin-top:8px}
-.btn{background:#1a1a1a;border:1px solid #333;border-radius:10px;color:#fff;padding:8px 12px;cursor:pointer}
+  .tabbar-wrap{width:100%;background:rgba(20,20,20,0.6);backdrop-filter:blur(12px);padding:10px 0;display:flex;justify-content:center;align-items:center;border-top:1px solid rgba(255,255,255,0.1);margin-top:auto}
+  .home-btn{width:48px;height:48px;background:rgba(60,60,60,0.8);border:1px solid #555;border-radius:12px;cursor:pointer;transition:.2s;display:block;margin:0 auto}
+  .home-btn:hover{background:rgba(120,120,120,0.8);border-color:var(--accent)}
+  .wrap{padding:20px;display:grid;gap:12px}
+  .list{display:grid;gap:10px}
+  .card{background:#0f0f0f;border:1px solid #222;border-radius:14px;padding:12px}
+  .row{display:flex;justify-content:space-between;gap:8px}
+  .muted{color:#9aa0a6;font-size:.85rem}
+  .pager{display:flex;justify-content:center;gap:8px;margin-top:8px}
+  .btn{background:#1a1a1a;border:1px solid #333;border-radius:10px;color:#fff;padding:8px 12px;cursor:pointer}
+  .wrap{padding:20px;display:grid;gap:12px}
+  .list{display:grid;gap:10px}
+  .card{background:#0f0f0f;border:1px solid #222;border-radius:14px;padding:12px}
+  .row{display:flex;justify-content:space-between;gap:8px}
+  .muted{color:#9aa0a6;font-size:.85rem}
+  .pager{display:flex;justify-content:center;gap:8px;margin-top:8px}
+  .btn{background:#1a1a1a;border:1px solid #333;border-radius:10px;color:#fff;padding:8px 12px;cursor:pointer}
 </style>
 </head>
 <body>
 <div class="app">
-<header><div class="logo">🤖 AI 일정 정리</div></header>
-<main class="wrap">
-<div id="list" class="list"></div>
-<div class="pager">
-<button class="btn" id="prev">이전</button>
-<button class="btn" id="next">다음</button>
-</div>
-</main>
-<div class="tabbar-wrap"><button class="home-btn" onclick="location.href='home.html'"></button></div>
+  <header><div class="logo">🤖 AI 일정 정리</div></header>
+  <main class="wrap">
+    <div id="list" class="list"></div>
+    <div class="pager">
+      <button class="btn" id="prev">이전</button>
+      <button class="btn" id="next">다음</button>
+    </div>
+  </main>
+  <div class="tabbar-wrap"><button class="home-btn" onclick="location.href='home.html'"></button></div>
 </div>
 <script>
-const KEY='rideout_schedules';
-const PAGE=4;
-let page=0;
-function render(){
-const arr=(JSON.parse(localStorage.getItem(KEY)||'[]'))
-.sort((a,b)=>new Date(a.when)-new Date(b.when));
-const start=page*PAGE; const end=start+PAGE;
-const slice=arr.slice(start,end);
-const el=document.getElementById('list');
-el.innerHTML = slice.map(it=>{
-const d=new Date(it.when);
-const time = d.toLocaleString();
-return `<div class='card'><div class='row'><b>${it.title}</b><span class='muted'>${time}</span></div>${it.note?`<div class='muted'>${it.note}</div>`:''}</div>`
-}).join('') || "<div class='muted'>등록된 일정이 없습니다.</div>";
-}
-document.getElementById('prev').onclick=()=>{ if(page>0){page--;render();}}
-document.getElementById('next').onclick=()=>{
-const arr=JSON.parse(localStorage.getItem(KEY)||'[]');
-if((page+1)*PAGE < arr.length){page++;render();}
-}
-render();
+  const KEY='rideout_schedules';
+  const PAGE=4;
+  let page=0;
+  function render(){
+    const arr=(JSON.parse(localStorage.getItem(KEY)||'[]'))
+      .sort((a,b)=>new Date(a.when)-new Date(b.when));
+    const start=page*PAGE; const end=start+PAGE;
+    const slice=arr.slice(start,end);
+    const el=document.getElementById('list');
+    el.innerHTML = slice.map(it=>{
+      const d=new Date(it.when);
+      const time = d.toLocaleString();
+      return `<div class='card'><div class='row'><b>${it.title}</b><span class='muted'>${time}</span></div>${it.note?`<div class='muted'>${it.note}</div>`:''}</div>`
+    }).join('') || "<div class='muted'>등록된 일정이 없습니다.</div>";
+  }
+  document.getElementById('prev').onclick=()=>{ if(page>0){page--;render();}}
+  document.getElementById('next').onclick=()=>{
+    const arr=JSON.parse(localStorage.getItem(KEY)||'[]');
+    if((page+1)*PAGE < arr.length){page++;render();}
+  }
+  render();
 </script>
 </body>
 </html>

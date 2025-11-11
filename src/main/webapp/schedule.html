@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
@@ -5,29 +6,39 @@
 <title>R!DE OUT • 일정 관리</title>
 <link rel="stylesheet" href="ui.css" />
 <style>
-.section {padding:20px}
-.title {font-size:1.2rem;font-weight:800}
-.subtitle {color:#9aa0a6;margin-top:6px}
-.opt-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:16px}
-.opt{background:#0f0f0f;border:1px solid #222;border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
-.opt span{font-weight:700}
+  /* 공통 하단바 & 홈버튼 (ui.css에 없다면 보강) */
+  .tabbar-wrap{width:100%;background:rgba(20,20,20,0.6);backdrop-filter:blur(12px);padding:10px 0;display:flex;justify-content:center;align-items:center;border-top:1px solid rgba(255,255,255,0.1);margin-top:auto}
+  .home-btn{width:48px;height:48px;background:rgba(60,60,60,0.8);border:1px solid #555;border-radius:12px;cursor:pointer;transition:.2s;display:block;margin:0 auto}
+  .home-btn:hover{background:rgba(120,120,120,0.8);border-color:var(--accent)}
+  .section {padding:20px}
+  .title {font-size:1.2rem;font-weight:800}
+  .subtitle {color:#9aa0a6;margin-top:6px}
+  .opt-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:16px}
+  .opt{background:#0f0f0f;border:1px solid #222;border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+  .opt span{font-weight:700}
+  .section {padding:20px}
+  .title {font-size:1.2rem;font-weight:800}
+  .subtitle {color:#9aa0a6;margin-top:6px}
+  .opt-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:16px}
+  .opt{background:#0f0f0f;border:1px solid #222;border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+  .opt span{font-weight:700}
 </style>
 </head>
 <body>
 <div class="app">
-<header>
-<div class="logo">📅 R!DE OUT</div>
-</header>
-<main class="section">
-<div class="title">Schedule Management</div>
-<div class="subtitle">스마트한 하루의 시작</div>
-<div class="opt-grid">
-<div class="opt" onclick="location.href='schedule-add.html'"><span>일정 등록</span> ▶️</div>
-<div class="opt" onclick="location.href='schedule-ai.html'"><span>AI 일정 정리</span> 🤖</div>
-<div class="opt" onclick="location.href='schedule-alarm.html'"><span>스마트 알람</span> ⏰</div>
-</div>
-</main>
-<div class="tabbar-wrap"><button class="home-btn" onclick="location.href='home.html'"></button></div>
+  <header>
+    <div class="logo">📅 R!DE OUT</div>
+  </header>
+  <main class="section">
+    <div class="title">Schedule Management</div>
+    <div class="subtitle">스마트한 하루의 시작</div>
+    <div class="opt-grid">
+      <div class="opt" onclick="location.href='schedule-add.html'"><span>일정 등록</span> ▶️</div>
+      <div class="opt" onclick="location.href='schedule-ai.html'"><span>AI 일정 정리</span> 🤖</div>
+      <div class="opt" onclick="location.href='schedule-alarm.html'"><span>스마트 알람</span> ⏰</div>
+    </div>
+  </main>
+  <div class="tabbar-wrap"><button class="home-btn" onclick="location.href='home.html'"></button></div>
 </div>
 </body>
 </html>

@@ -1,152 +1,107 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>R!DE OUT • 홈</title>
-<link rel="stylesheet" href="ui.css">
-</head>
-
-<body>
-<div class="app">
-
-  <!-- ===== 상단 헤더 ===== -->
-<header>
-  <img src="images/logo.png" class="logo-img-left">
-  <div class="logo-title">R!DE OUT</div>
-  <div id="userInfo" class="user-info">
-    <img id="userImg"><span id="userName"></span>
-  </div>
-  <div id="userMenu" class="user-menu">
-    <button id="changeProfileBtn">🖼️ 프로필 변경</button>
-    <button id="settingsBtn">⚙️ 설정</button>
-    <button id="logoutBtn">🚪 로그아웃</button>
-  </div>
-</header>
-
-
-  <!-- ===== 메인 콘텐츠 ===== -->
-  <main id="content">
-   <!-- main#content 내부 아이콘 그리드 -->
-<section class="app-icon-grid">
-  <div class="app-icon" onclick="openPage('schedule.html')">
-    <div class="app-icon-box"><i>📅</i></div>
-    <span>일정관리</span>
-  </div>
-
-  <div class="app-icon" onclick="openPage('beat.html')">
-    <div class="app-icon-box"><i>🎧</i></div>
-    <span>비트 추천</span>
-  </div>
-
-  <div class="app-icon" onclick="openPage('rhyme.html')">
-    <div class="app-icon-box"><i>✍️</i></div>
-    <span>라임 추천</span>
-  </div>
-
-  <div class="app-icon" onclick="openPage('alarm.html')">
-    <div class="app-icon-box"><i>⏰</i></div>
-    <span>비트 알람</span>
-  </div>
-
-  <div class="app-icon" onclick="openPage('health.html')">
-    <div class="app-icon-box"><i>💪</i></div>
-    <span>건강 관리</span>
-  </div>
-
-  <div class="app-icon" onclick="openPage('ai.html')">
-    <div class="app-icon-box"><i>🤖</i></div>
-    <span>성장하는 AI</span>
-  </div>
-</section>
-  </main>
-
-  <!-- ===== 하단 탭바 ===== -->
-  <footer>
-    <div class="tab-btn" id="homeBtn" title="Home"></div>
-  </footer>
-</div>
-
-<!-- ===== 숨겨진 파일 입력창 ===== -->
-<input type="file" id="profileInput" accept="image/*" style="display:none;">
-
-<!-- ===== 자바스크립트 ===== -->
-<script src="ui.js"></script>
-
-<script>
-/* ✅ 페이지 이동 */
-function openPage(page) {
-  window.location.href = page;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>R!DE OUT • 메인</title>
+<style>
+:root {
+  --bg:#000; --fg:#fff; --card:#0d0d0d; --accent:#8a7cff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{
+  height:100%;background:var(--bg);color:var(--fg);
+  font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+.app{
+  width:100%;max-width:430px;min-height:100svh;height:100dvh;margin:0 auto;
+  display:flex;flex-direction:column;
+  background:var(--bg);border:1px solid #222;border-radius:30px;overflow:hidden;
+  box-shadow:0 0 20px rgba(0,0,0,.8);
+  position:relative;
 }
 
-/* ✅ 로그인된 사용자 정보 불러오기 */
-window.onload = () => {
-  const user = JSON.parse(localStorage.getItem("rideout_user"));
-  const userInfo = document.getElementById("userInfo");
-  if (user) {
-    document.getElementById("userName").textContent = user.name || "USER";
-    document.getElementById("userImg").src = user.picture || "images/defaultProfile.png";
-    userInfo.style.display = "flex";
-  } else {
-    userInfo.style.display = "none";
-  }
-};
+header{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  padding:10px 18px;background:rgba(0,0,0,.7);backdrop-filter:blur(12px);
+}
+.logo{
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:1.4rem;color:#fff;gap:8px;
+}
+.login-box{
+  position:absolute;right:18px;top:50%;transform:translateY(-50%);
+  border:1px solid #555;border-radius:10px;padding:6px 16px;background:none;color:#fff;cursor:pointer;font-weight:600;
+}
+.login-box:hover{border-color:var(--accent);color:var(--accent);}
 
-/* ✅ 메뉴 애니메이션 */
-const menu = document.getElementById("userMenu");
-const userInfo = document.getElementById("userInfo");
+main{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  gap:20px;padding:30px 20px;position:relative;min-height:0;
+}
+.center-emoji{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:12rem;opacity:0.07;pointer-events:none;
+  animation:fadePulse 6s ease-in-out infinite;
+}
+@keyframes fadePulse {
+  0% {opacity:0.05;transform:translate(-50%,-50%) scale(1);}
+  50% {opacity:0.15;transform:translate(-50%,-50%) scale(1.1);}
+  100% {opacity:0.05;transform:translate(-50%,-50%) scale(1);}
+}
+.icon-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:24px 14px;justify-items:center;width:100%;margin-top:40px;
+}
+.icon-container{display:flex;flex-direction:column;align-items:center;}
+.icon-btn{
+  width:70px;height:70px;background:var(--card);border:1px solid #333;border-radius:20px;color:#fff;
+  display:flex;align-items:center;justify-content:center;transition:0.2s;overflow:hidden;position:relative;
+}
+.icon-btn:hover{transform:scale(1.08);border-color:var(--accent);box-shadow:0 0 12px var(--accent);}
+.icon-label{margin-top:8px;font-size:0.8rem;font-weight:600;color:#fff;text-align:center;}
+.icon-btn .emoji{font-size:34px;}
 
-userInfo.addEventListener("click", () => {
-  if (menu.classList.contains("show")) {
-    menu.classList.remove("show");
-    setTimeout(() => (menu.style.display = "none"), 200);
-  } else {
-    menu.style.display = "flex";
-    setTimeout(() => menu.classList.add("show"), 10);
-  }
-});
+.tabbar-wrap{
+  width:100%;background:rgba(20,20,20,0.6);backdrop-filter:blur(12px);
+  padding:10px 0;display:flex;justify-content:center;align-items:center;border-top:1px solid rgba(255,255,255,0.1);
+  margin-top:auto; /* 항상 하단 고정 */
+}
+.home-btn{
+  width:48px;height:48px;background:rgba(60,60,60,0.8);border:1px solid #555;border-radius:12px;cursor:pointer;transition:0.2s;
+  display:block;margin:0 auto; /* 정사각 + 중앙 고정 */
+}
+.home-btn:hover{background:rgba(120,120,120,0.8);border-color:var(--accent);}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="logo">🔥 R!DE OUT</div>
+    <button class="login-box">login</button>
+  </header>
 
-window.addEventListener("click", (e) => {
-  if (!menu.contains(e.target) && !userInfo.contains(e.target)) {
-    menu.classList.remove("show");
-    setTimeout(() => (menu.style.display = "none"), 200);
-  }
-});
+  <main>
+    <div class="center-emoji">💫</div>
+    <div class="icon-grid">
+      <div class="icon-container"><button class="icon-btn" onclick="location.href='schedule.html'"><div class="emoji">📅</div></button><span class="icon-label">일정 관리</span></div>
+      <div class="icon-container"><button class="icon-btn" onclick="location.href='beat.html'"><div class="emoji">🎧</div></button><span class="icon-label">비트 추천</span></div>
+      <div class="icon-container"><button class="icon-btn"><div class="emoji">✍️</div></button><span class="icon-label">라임 추천</span></div>
+      <div class="icon-container"><button class="icon-btn"><div class="emoji">⏰</div></button><span class="icon-label">비트 알람</span></div>
+      <div class="icon-container"><button class="icon-btn"><div class="emoji">💪</div></button><span class="icon-label">건강 관리</span></div>
+      <div class="icon-container"><button class="icon-btn"><div class="emoji">🤖</div></button><span class="icon-label">성장형 AI</span></div>
+    </div>
+  </main>
 
-/* ✅ 프로필 변경 (파일 업로드) */
-const profileInput = document.getElementById("profileInput");
-document.getElementById("changeProfileBtn").addEventListener("click", () => {
-  profileInput.click(); // 파일 선택창 열기
-});
+  <div class="tabbar-wrap">
+    <button class="home-btn"></button>
+  </div>
+</div>
 
-profileInput.addEventListener("change", (event) => {
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      document.getElementById("userImg").src = e.target.result;
-      const user = JSON.parse(localStorage.getItem("rideout_user")) || {};
-      user.picture = e.target.result; // base64 저장
-      localStorage.setItem("rideout_user", JSON.stringify(user));
-    };
-    reader.readAsDataURL(file); // 이미지 파일을 base64로 변환
-  }
-});
-
-/* ✅ 설정 버튼 */
-document.getElementById("settingsBtn").addEventListener("click", () => {
-  location.href = "settings.html";
-});
-
-
-/* ✅ 로그아웃 버튼 */
-document.getElementById("logoutBtn").addEventListener("click", () => {
-  localStorage.removeItem("rideout_user");
-  document.getElementById("userMenu").classList.remove("show");
-  setTimeout(() => (document.getElementById("userMenu").style.display = "none"), 200);
-  alert("로그아웃 되었습니다.");
-  location.reload();
-});
+<script>
+// 홈으로 돌아오는 기능이 beat.html에서 동작하도록 설정됨
+function goHome() {
+  window.location.href = './main.html';
+}
 </script>
 </body>
 </html>
